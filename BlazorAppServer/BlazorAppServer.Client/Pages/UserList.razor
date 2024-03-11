@@ -1,0 +1,96 @@
+﻿@inject IJSRuntime js
+@rendermode InteractiveWebAssembly
+@inject UserService service
+@page "/uList"
+
+
+<h3>Users List</h3>
+<NavLink class="nav-link" href="create">Add</NavLink>
+<br />
+<hr />
+<table class="table table-responsive table-striped table-hover">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var cat in data)
+		{
+
+			<tr>
+				<td>@cat.UserId</td>
+				<td>@cat.Username</td>
+				<td>
+					<ol>
+						@foreach (var ride in cat.Rides)
+						{
+							<li>
+								<dl>
+									<dt>Departure Location</dt>
+									<dd>@ride.DepartureLocation</dd>
+									<dt>Destination</dt>
+									<dd>@ride.Destination</dd>
+									<dt>DepartureTime</dt>
+									<dd>@ride.DepartureTime</dd>
+									<dt>VehicleType</dt>
+									<dd>@ride.VehicleType</dd>
+									<dt>Ride Details</dt>
+									<dd>@ride.RideDetails</dd>
+									<dt>Estimated Fare</dt>
+									<dd>@ride.EstimatedFare</dd>
+									<dt>Is Smoking Allowed?</dt>
+									<dd>@ride.IsSmokingAllowed</dd>
+									<dt>Ride Duration</dt>
+									<dd>@ride.RideDuration</dd>
+								</dl>
+							</li>
+						}
+					</ol>
+				</td>
+				<td class="btn-group">
+					<a class="nav-link btn btn-outline-info" href="/update/@cat.UserId">Update</a>
+					<button class="btn btn-outline-danger" @onclick="()=> DeleteData(cat)">
+						Delete
+					</button>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+
+
+@code {
+
+	private IList<User>? data = new List<User>();
+	
+	protected override async Task OnInitializedAsync()
+	{
+
+		await loadData();
+
+	}
+
+	async Task loadData()
+	{
+		this.data = await this.service.GetAll();
+	}
+
+	async Task DeleteData(User user)
+	{
+		var confirm = await js.InvokeAsync<bool>("confirm", $"delete data of {user.Username}?");
+
+		if (!confirm) return;
+
+		var result = await this.service.Delete(user.UserId);
+
+		if (result.IsSuccessStatusCode)
+		{
+			await loadData();
+		}
+		
+	}
+
+}

@@ -1,0 +1,57 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BlazorAppServer.Models
+{
+    [Table(nameof(Ride))]
+    public class Ride
+    {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int RideId { get; set; }        
+        public string DepartureLocation { get; set; }
+        public string Destination { get; set; }
+        public DateTime DepartureTime { get; set; } = DateTime.Now;
+
+        public string DepartureTimeFormatted
+        {
+            get => DepartureTime.ToString("yyyy-MM-dd HH:mm");
+            set
+            {
+                if (DateTime.TryParse(value, out DateTime result))
+                {
+                    DepartureTime = result;
+                }
+                else
+                {
+                    // Handle invalid input here, e.g., show error message
+                }
+            }
+        }
+
+        public string VehicleType { get; set; }
+        public string RideDetails { get; set; } 
+        public decimal EstimatedFare { get; set; } 
+        public bool IsSmokingAllowed { get; set; } 
+        public TimeSpan RideDuration { get; set; }
+
+        [ForeignKey(nameof(User.UserId))]
+        public int UserId { get; set; }
+        public User User { get; set; }
+    }
+
+    //public enum VehicleType
+    //{
+    //    Car,
+    //    SUV,
+    //    Van,
+    //    Bus,
+    //    Motorcycle,
+    //    Bicycle,
+    //    Other
+    //}
+}

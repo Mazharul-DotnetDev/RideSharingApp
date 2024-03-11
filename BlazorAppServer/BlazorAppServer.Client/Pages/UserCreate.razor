@@ -1,0 +1,139 @@
+﻿@page "/create"
+@rendermode InteractiveWebAssembly
+@inject UserService service
+@inject NavigationManager nav
+
+<h3>Add Users</h3>
+
+
+
+<EditForm Model="model" OnValidSubmit="SaveData">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+	@if (!string.IsNullOrEmpty(message))
+	{
+		<span class="text-danger text-lg-center">@message</span>
+	}
+	<div>
+		<label for="name">User Name:</label>
+		<InputText id="name" class="form-control" required @bind-Value="model.Username" />
+		<ValidationMessage For="()=> model.Username" />
+	</div>
+
+	<div>
+		<label for="name">User Phone Number:</label>
+		<InputText id="name" class="form-control" required @bind-Value="model.Phone" />
+		<ValidationMessage For="()=> model.Phone" />
+	</div>
+
+	<table class="table table-active table-bordered table-hover">
+		<tr>
+			<th>Departure Location</th>
+			<th>Destination</th>
+			<th>Departure Time</th>
+			<th>Vehicle Type</th>
+			<th>Ride Details</th>
+			<th>Estimated Fare</th>
+			<th>Is Smoking Allowed</th>
+			<th>Ride Duration</th>
+			<th>
+				<button type="button" class="btn btn-outline-info" @onclick="AddRide">Add Rides</button>
+			</th>
+		</tr>
+		@foreach (var prod in model.Rides)
+		{
+			<tr>
+				<td>
+					<InputText class="form-control" @bind-Value="prod.DepartureLocation" />
+					<ValidationMessage For="()=> prod.DepartureLocation" />
+				</td>
+				<td>
+					<InputText class="form-control" @bind-Value="prod.Destination" />
+					<ValidationMessage For="()=> prod.Destination" />
+				</td>
+				<td>
+					<InputText class="form-control" @bind-Value="@prod.DepartureTimeFormatted" />
+					<ValidationMessage For="()=> prod.DepartureTimeFormatted" />
+
+				</td>
+
+				<td>
+					<InputText class="form-control" @bind-Value="@prod.VehicleType" />
+					<ValidationMessage For="()=> prod.VehicleType" />
+
+				</td>
+
+				<td>
+					<InputNumber class="form-control" @bind-Value="prod.RideDetails" />
+					<ValidationMessage For="()=> prod.RideDetails" />
+				</td>
+
+				<td>
+					<InputNumber class="form-control" @bind-Value="prod.EstimatedFare" />
+					<ValidationMessage For="()=> prod.EstimatedFare" />
+				</td>
+
+				<td>
+					<InputNumber class="form-control" @bind-Value="prod.IsSmokingAllowed" />
+					<ValidationMessage For="()=> prod.IsSmokingAllowed" />
+				</td>
+
+				<td>
+					<InputNumber class="form-control" @bind-Value="prod.RideDuration" />
+					<ValidationMessage For="()=> prod.RideDuration" />
+				</td>
+
+				<td>
+					<button type="button" class="btn btn-outline-warning" @onclick="()=> DeleteRide(prod)">Delete</button>
+				</td>
+			</tr>
+
+		}
+	</table>
+
+	<button type="submit" class="btn btn-outline-success">
+		Save
+	</button>
+	<NavLink class="btn btn-outline-info" href="uList">
+		Cancel
+	</NavLink>
+</EditForm>
+
+
+
+
+
+@code {
+
+	private User model = new User();
+	int index = 0;
+
+
+	string? message;
+
+	public async Task SaveData()
+	{
+		var response = await service.Save(model);
+
+		if (response.IsSuccessStatusCode)
+		{
+			nav.NavigateTo("/uList");
+		}
+		else
+		{
+			this.message = response.ReasonPhrase;
+			//response.Content
+		}
+	}
+
+	private void AddRide()
+	{
+		model.Rides?.Add(new Ride());
+	}
+	private void DeleteRide(Ride ride)
+	{
+		model.Rides?.Remove(ride);
+
+	}
+
+}
