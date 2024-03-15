@@ -1,7 +1,8 @@
-﻿@inject IJSRuntime js
+﻿@page "/uList"
+@inject IJSRuntime js
 @rendermode InteractiveWebAssembly
 @inject UserService service
-@page "/uList"
+
 
 
 <h3>Users List</h3>
@@ -31,19 +32,25 @@
 									<dt>Departure Location</dt>
 									<dd>@ride.DepartureLocation</dd>
 									<dt>Destination</dt>
-									<dd>@ride.Destination</dd>
-									<dt>DepartureTime</dt>
-									<dd>@ride.DepartureTime</dd>
+									<dd>@ride.Destination</dd>									
+									<dt>Departure Time</dt>
+									<dd>
+										@ride.DepartureTime?.ToString("dd-MMM-yyyy")
+									</dd>
+
 									<dt>VehicleType</dt>
 									<dd>@ride.VehicleType</dd>
 									<dt>Ride Details</dt>
 									<dd>@ride.RideDetails</dd>
 									<dt>Estimated Fare</dt>
 									<dd>@ride.EstimatedFare</dd>
+									
 									<dt>Is Smoking Allowed?</dt>
-									<dd>@ride.IsSmokingAllowed</dd>
-									<dt>Ride Duration</dt>
-									<dd>@ride.RideDuration</dd>
+									<dd>
+										<InputCheckbox readonly @bind-Value="@ride.IsSmokingAllowed" />
+									</dd>
+
+									
 								</dl>
 							</li>
 						}

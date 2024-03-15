@@ -15,43 +15,17 @@ namespace BlazorAppServer.Models
         public int RideId { get; set; }        
         public string DepartureLocation { get; set; }
         public string Destination { get; set; }
-        public DateTime DepartureTime { get; set; } = DateTime.Now;
-
-        public string DepartureTimeFormatted
-        {
-            get => DepartureTime.ToString("yyyy-MM-dd HH:mm");
-            set
-            {
-                if (DateTime.TryParse(value, out DateTime result))
-                {
-                    DepartureTime = result;
-                }
-                else
-                {
-                    // Handle invalid input here, e.g., show error message
-                }
-            }
-        }
+        public DateTime? DepartureTime { get; set; } 
 
         public string VehicleType { get; set; }
         public string RideDetails { get; set; } 
         public decimal EstimatedFare { get; set; } 
         public bool IsSmokingAllowed { get; set; } 
-        public TimeSpan RideDuration { get; set; }
 
         [ForeignKey(nameof(User.UserId))]
         public int UserId { get; set; }
         public User User { get; set; }
     }
 
-    //public enum VehicleType
-    //{
-    //    Car,
-    //    SUV,
-    //    Van,
-    //    Bus,
-    //    Motorcycle,
-    //    Bicycle,
-    //    Other
-    //}
+    
 }

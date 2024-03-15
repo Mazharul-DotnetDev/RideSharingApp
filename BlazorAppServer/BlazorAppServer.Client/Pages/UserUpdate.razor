@@ -1,19 +1,13 @@
-﻿@page "/create"
+﻿@page "/update/{useId:int}"
 @rendermode InteractiveWebAssembly
 @inject UserService service
 @inject NavigationManager nav
-
-<h3>Add Users</h3>
-
+@inject IJSRuntime JS
 
 
 <EditForm Model="model" OnValidSubmit="SaveData">
 	<DataAnnotationsValidator />
 	<ValidationSummary />
-	@if (!string.IsNullOrEmpty(message))
-	{
-		<span class="text-danger text-lg-center">@message</span>
-	}
 	<div>
 		<label for="name">User Name:</label>
 		<InputText id="name" class="form-control" required @bind-Value="model.Username" />
@@ -28,16 +22,17 @@
 
 	<table class="table table-active table-bordered table-hover">
 		<tr>
-			<th>Departure Location</th>
-			<th>Destination</th>
-			<th>Departure Time</th>
-			<th>Vehicle Type</th>
-			<th>Ride Details</th>
-			<th>Estimated Fare</th>
-			<th>Is Smoking Allowed</th>
-			@* <th>Ride Duration</th> *@
+			<th>Product Name</th>
+			<th>Product Number</th>
+			<th>Color</th>
+			<th>MFD</th>
+			<th>Standard Cost</th>
+			<th>List Price</th>
+			<th>Size</th>
+			<th>Weight</th>
+			<th>Available?</th>
 			<th>
-				<button type="button" class="btn btn-outline-info" @onclick="AddRide">Add Rides</button>
+				<button type="button" class="btn btn-outline-info" @onclick="AddRide">Add Ride</button>
 			</th>
 		</tr>
 		@foreach (var prod in model.Rides)
@@ -52,10 +47,10 @@
 					<ValidationMessage For="()=> prod.Destination" />
 				</td>
 				@* <td>
-					<InputText class="form-control" @bind-Value="@prod.DepartureTimeFormatted" />
-					<ValidationMessage For="()=> prod.DepartureTimeFormatted" />
+			<InputText class="form-control" @bind-Value="@prod.DepartureTimeFormatted" />
+			<ValidationMessage For="()=> prod.DepartureTimeFormatted" />
 
-				</td> *@
+			</td> *@
 
 				<td>
 					<InputDate @bind-Value="prod.DepartureTime" />
@@ -80,9 +75,9 @@
 				</td>
 
 				@* <td>
-					<InputNumber class="form-control" @bind-Value="prod.IsSmokingAllowed" />
-					<ValidationMessage For="()=> prod.IsSmokingAllowed" />
-				</td> *@
+			<InputNumber class="form-control" @bind-Value="prod.IsSmokingAllowed" />
+			<ValidationMessage For="()=> prod.IsSmokingAllowed" />
+			</td> *@
 
 				<td>
 					<InputCheckbox @bind-Value="prod.IsSmokingAllowed" />
@@ -91,14 +86,15 @@
 
 
 				@* <td>
-					<InputNumber class="form-control" @bind-Value="prod.RideDuration" />
-					<ValidationMessage For="()=> prod.RideDuration" />
-				</td> *@
+			<InputNumber class="form-control" @bind-Value="prod.RideDuration" />
+			<ValidationMessage For="()=> prod.RideDuration" />
+			</td> *@
 
 				<td>
 					<button type="button" class="btn btn-outline-warning" @onclick="()=> DeleteRide(prod)">Delete</button>
 				</td>
 			</tr>
+
 
 		}
 	</table>
@@ -106,46 +102,54 @@
 	<button type="submit" class="btn btn-outline-success">
 		Save
 	</button>
+	<button type="button" class="btn btn-outline-danger" @onclick="DataDelete">
+		Delete
+	</button>
 	<NavLink class="btn btn-outline-info" href="uList">
 		Cancel
 	</NavLink>
 </EditForm>
 
-
-
-
-
 @code {
 
+	[Parameter]
+	public int useId { get; set; }
+
 	private User model = new User();
-	int index = 0;
-
-
-	string? message;
+	
+	protected override async Task OnInitializedAsync()
+	{		
+		this.model = await this.service.GetById(useId);
+		await base.OnInitializedAsync();
+	}
 
 	public async Task SaveData()
 	{
-		var response = await service.Save(model);
+		var response = await service.Update(model);
 
 		if (response.IsSuccessStatusCode)
 		{
 			nav.NavigateTo("/uList");
 		}
-		else
-		{
-			this.message = response.ReasonPhrase;
-			//response.Content
-		}
 	}
 
-	private void AddRide()
+	void AddRide()
 	{
 		model.Rides?.Add(new Ride());
 	}
-	private void DeleteRide(Ride ride)
-	{
-		model.Rides?.Remove(ride);
 
+	void DeleteRide(Ride rideItem)
+	{
+		model.Rides?.Remove(rideItem);
 	}
 
+	async Task DataDelete()
+	{
+		var response = await service.Delete(useId);
+
+		if (response.IsSuccessStatusCode)
+		{
+			nav.NavigateTo("/uList");
+		}
+	}
 }

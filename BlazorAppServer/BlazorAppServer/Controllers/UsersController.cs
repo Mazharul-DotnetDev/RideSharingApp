@@ -52,43 +52,55 @@ namespace BlazorAppServer.Controllers
                 return BadRequest();
             }
 
-            try
+			if (ModelState.IsValid)
             {
-                _context.Update(user);
+				try
+				{
+					_context.Update(user);
 
-                var itemsIdList = user.Rides.Select(i => i.RideId).ToList();
+					var itemsIdList = user.Rides.Select(i => i.RideId).ToList();
 
-                var delItems = await _context.Rides.Where(i => i.UserId == id).Where(i => !itemsIdList.Contains(i.RideId)).ToListAsync();
+					var delItems = await _context.Rides.Where(i => i.UserId == id).Where(i => !itemsIdList.Contains(i.RideId)).ToListAsync();
 
-                _context.Rides.RemoveRange(delItems);
+					_context.Rides.RemoveRange(delItems);
 
 
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+					await _context.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!UserExists(id))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
 
-            return NoContent();
-        }
+				return NoContent();
+			}
+
+			return BadRequest(ModelState);
+
+		}
 
         
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+			if (ModelState.IsValid)
+            {
+				_context.Users.Add(user);
+				await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUsers", new { id = user.UserId }, user);
-        }
+				return CreatedAtAction("GetUsers", new { id = user.UserId }, user);
+			}
+
+			return BadRequest(ModelState);
+
+		}
 
        
         [HttpDelete("{id}")]

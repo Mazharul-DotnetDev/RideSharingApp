@@ -45,8 +45,7 @@ namespace BlazorAppServer.DataContext
                 VehicleType = "Car",
                 RideDetails = "Comfortable sedan, music available",
                 EstimatedFare = 50.00m,
-                IsSmokingAllowed = false,
-                RideDuration = TimeSpan.FromHours(3),
+                IsSmokingAllowed = true,               
                 UserId = 1 
             },
             new Ride
@@ -58,8 +57,7 @@ namespace BlazorAppServer.DataContext
                 VehicleType = "Car",
                 RideDetails = "Spacious van, no smoking",
                 EstimatedFare = 80.00m,
-                IsSmokingAllowed = false,
-                RideDuration = TimeSpan.FromHours(4),
+                IsSmokingAllowed = true,                
                 UserId = 2 
             },
             new Ride
@@ -72,7 +70,6 @@ namespace BlazorAppServer.DataContext
                 RideDetails = "Comfortable sedan, music available",
                 EstimatedFare = 50.00m,
                 IsSmokingAllowed = false,
-                RideDuration = TimeSpan.FromHours(3),
                 UserId = 3
             },
             new Ride
@@ -85,7 +82,6 @@ namespace BlazorAppServer.DataContext
                 RideDetails = "Spacious van, no smoking",
                 EstimatedFare = 80.00m,
                 IsSmokingAllowed = false,
-                RideDuration = TimeSpan.FromHours(4),
                 UserId = 4
             },
             new Ride
@@ -98,7 +94,6 @@ namespace BlazorAppServer.DataContext
                 RideDetails = "Comfortable sedan, music available",
                 EstimatedFare = 50.00m,
                 IsSmokingAllowed = false,
-                RideDuration = TimeSpan.FromHours(3),
                 UserId = 5
             },
             new Ride
@@ -111,7 +106,6 @@ namespace BlazorAppServer.DataContext
                 RideDetails = "Spacious van, no smoking",
                 EstimatedFare = 80.00m,
                 IsSmokingAllowed = false,
-                RideDuration = TimeSpan.FromHours(4),
                 UserId = 6
             },
             new Ride
@@ -124,7 +118,6 @@ namespace BlazorAppServer.DataContext
                 RideDetails = "Comfortable sedan, music available",
                 EstimatedFare = 50.00m,
                 IsSmokingAllowed = false,
-                RideDuration = TimeSpan.FromHours(3),
                 UserId = 7
             },
             new Ride
@@ -137,7 +130,6 @@ namespace BlazorAppServer.DataContext
                 RideDetails = "Spacious van, no smoking",
                 EstimatedFare = 80.00m,
                 IsSmokingAllowed = false,
-                RideDuration = TimeSpan.FromHours(4),
                 UserId = 8
             },
             new Ride
@@ -150,7 +142,6 @@ namespace BlazorAppServer.DataContext
                 RideDetails = "Comfortable sedan, music available",
                 EstimatedFare = 50.00m,
                 IsSmokingAllowed = false,
-                RideDuration = TimeSpan.FromHours(3),
                 UserId = 9
             },
             new Ride
@@ -163,7 +154,6 @@ namespace BlazorAppServer.DataContext
                 RideDetails = "Spacious van, no smoking",
                 EstimatedFare = 80.00m,
                 IsSmokingAllowed = false,
-                RideDuration = TimeSpan.FromHours(4),
                 UserId = 10
             }
 
