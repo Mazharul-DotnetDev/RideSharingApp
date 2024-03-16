@@ -24,7 +24,7 @@ namespace BlazorAppServer.Models
 
         [ForeignKey(nameof(User.UserId))]
         public int UserId { get; set; }
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 
     

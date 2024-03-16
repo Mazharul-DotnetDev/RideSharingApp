@@ -17,6 +17,7 @@ opt.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=RideSharingDb;Trusted_
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
 builder.Services.AddHttpClient<UserService>();
